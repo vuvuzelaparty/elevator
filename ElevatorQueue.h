@@ -18,5 +18,6 @@ typedef struct queue_st {
 
 void addFloor(Queue *, int, int);
 void removeFloor(Queue *, int);
+void printQueue(Queue *);
 int isEmpty(Queue *);
 #endif

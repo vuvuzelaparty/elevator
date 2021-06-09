@@ -110,22 +110,10 @@ int createButtonPress(void) {
 void printQueues(void) {
 	if (!isEmpty(upQueue)) {
 		printf("\nupQueue:\n");
-		if (!isEmpty(upQueue)) {
-			Node *current = upQueue->head;
-			while (current != NULL) {
-				printf("%d\n", current->value);
-				current = current->next;
-			}
-		}
+		printQueue(upQueue);
 	}
 	if (!isEmpty(downQueue)) {
 		printf("downQueue:\n");
-		if (!isEmpty(downQueue)) {
-			Node *current = downQueue->head;
-			while (current != NULL) {
-				printf("%d\n", current->value);
-				current = current->next;
-			}
-		}
+		printQueue(downQueue);
 	}
 }

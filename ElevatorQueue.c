@@ -66,6 +66,16 @@ void removeFloor(Queue *queue, int floor) {
 	}
 }
 
+void printQueue(Queue *queue) {
+	if (!isEmpty(queue)) {
+		Node *current = queue->head;
+		while (current != NULL) {
+			printf("%d\n", current->value);
+			current = current->next;
+		}
+	}
+}
+
 int isEmpty(Queue *queue) {
 	return queue->size == 0;
 }
