@@ -1,5 +1,5 @@
-#ifndef _ELEVATOR_QUEUE_H // what are these? I see these everywhere in other projects
-#define _ELEVATOR_QUEUE_H
+#ifndef ELEVATOR_QUEUE_H
+#define ELEVATOR_QUEUE_H
 #include <stdio.h>
 
 #define UP 1

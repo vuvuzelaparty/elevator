@@ -1,5 +1,5 @@
-#ifndef _ELEVATOR_H
-#define _ELEVATOR_H
+#ifndef ELEVATOR_H
+#define ELEVATOR_H
 
 #include <stdio.h>
 #include <stdlib.h>

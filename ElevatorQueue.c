@@ -3,25 +3,21 @@
 
 void addFloor(Queue *queue, int floor, int direction) {
 	Node *current = queue->head;
-	int isNewHead = 0;
+	int isNewHead;
 	if (!isEmpty(queue)) {
 		// make sure that we don't put the same floor more than once
 		for (Node *check = current; check != NULL; check = check->next)
 			if (check->value == floor)
 				return;
 		if (direction == UP) {
-			if (floor < queue->head->value)
-				isNewHead = 1;
-			else
-				while (current->next != NULL && current->next->value < floor)
-					current = current->next;
+			isNewHead = floor < queue->head->value;
+			if (!isNewHead)
+				for (; current->next != NULL && current->next->value < floor; current = current->next);
 		}
 		else if (direction == DOWN) {
-			if (floor > queue->head->value)
-				isNewHead = 1;
-			else
-				while (current->next != NULL && current->next->value > floor)
-					current = current->next;
+			isNewHead = floor > queue->head->value;
+			if (!isNewHead)
+				for (; current->next != NULL && current->next->value > floor; current = current->next);
 		}
 	}
 	Node *n = (Node *) malloc(sizeof(Node));
