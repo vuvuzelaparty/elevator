@@ -43,33 +43,23 @@ void addFloor(Queue *queue, int floor) {
 void removeFloor(Queue *queue, int floor) {
 	if (!isEmpty(queue)) {
 		Node *current = queue->head;
-		if (current->value == floor) { // first node
+		if (current->value == floor) // first node
 			queue->head = current->next;
-			free(current);
-			queue->size--;
-			return;
-		} else { // not first node
+		else { // not first node
 			current = current->next;
-			for (Node *prev = queue->head; current != NULL; prev->next = current, current = current->next) {
-				if (current->value == floor) {
+			for (Node *prev = queue->head; current != NULL; prev->next = current, current = current->next)
+				if (current->value == floor)
 					prev->next = current->next;
-					free(current);
-					queue->size--;
-					return;
-				}
-			}
 		}
+		free(current);
+		queue->size--;
 	}
 }
 
 void printQueue(Queue *queue) {
-	if (!isEmpty(queue)) {
-		Node *current = queue->head;
-		while (current != NULL) {
+	if (!isEmpty(queue))
+		for (Node *current = queue->head; current != NULL; current = current->next)
 			printf("%d\n", current->value);
-			current = current->next;
-		}
-	}
 }
 
 int isEmpty(Queue *queue) {

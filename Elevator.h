@@ -1,7 +1,5 @@
 #ifndef ELEVATOR_H
 #define ELEVATOR_H
-
-#include <stdio.h>
 #include <stdlib.h>
 #include "ElevatorQueue.h"
 

@@ -41,15 +41,10 @@ void listenForButtonPress(void) {
 }
 
 void buttonPress(int floor) {
-	if (floor > elevator->currentFloor) {
+	if (floor > elevator->currentFloor)
 		addFloor(upQueue, floor);
-		return;
-	}
-	else if (floor < elevator->currentFloor) {
+	else if (floor < elevator->currentFloor)
 		addFloor(downQueue, floor);
-		return;
-	}
-	return;
 }
 
 void tick(void) {
@@ -88,14 +83,10 @@ void tick(void) {
 		case IDLE :
 			printf("IDLE\nCurrent floor: %d\n", elevator->currentFloor);
 			listenForButtonPress();
-			if (!isEmpty(upQueue)) {
+			if (!isEmpty(upQueue))
 				elevator->state = GOING_UP;
-				break;
-			}
-			else if (!isEmpty(downQueue)){
+			else if (!isEmpty(downQueue))
 				elevator->state = GOING_DOWN;
-				break;
-			}
 			printQueues();
 			break;
 	}
