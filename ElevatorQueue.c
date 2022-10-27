@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "ElevatorQueue.h"
 
-void addFloor(Queue *queue, int floor, int direction) {
+void addFloor(Queue *queue, int floor) {
 	Node *current = queue->head;
 	int isNewHead;
 	if (!isEmpty(queue)) {
@@ -9,12 +9,12 @@ void addFloor(Queue *queue, int floor, int direction) {
 		for (Node *check = current; check != NULL; check = check->next)
 			if (check->value == floor)
 				return;
-		if (direction == UP) {
+		if (queue->direction == UP) {
 			isNewHead = floor < queue->head->value;
 			if (!isNewHead)
 				for (; current->next != NULL && current->next->value < floor; current = current->next);
 		}
-		else if (direction == DOWN) {
+		else if (queue->direction == DOWN) {
 			isNewHead = floor > queue->head->value;
 			if (!isNewHead)
 				for (; current->next != NULL && current->next->value > floor; current = current->next);

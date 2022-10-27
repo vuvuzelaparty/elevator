@@ -16,8 +16,8 @@ typedef struct queue_st {
 	Node *head;
 } Queue;
 
-void addFloor(Queue *, int, int);
-void removeFloor(Queue *, int);
-void printQueue(Queue *);
-int isEmpty(Queue *);
+void addFloor(Queue *queue, int floor);
+void removeFloor(Queue *queue, int floor);
+void printQueue(Queue *queue);
+int isEmpty(Queue *queue);
 #endif

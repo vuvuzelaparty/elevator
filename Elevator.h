@@ -25,7 +25,7 @@ int createButtonPress(void);
 void init(void);
 void fini(void);
 void listenForButtonPress(void);
-void buttonPress(int);
+void buttonPress(int floor);
 void tick(void);
 void printQueues(void);
 #endif
