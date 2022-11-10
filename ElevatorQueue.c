@@ -13,27 +13,24 @@ void addFloor(Queue *queue, int floor) {
 			isNewHead = floor < queue->head->value;
 			if (!isNewHead)
 				for (; current->next != NULL && current->next->value < floor; current = current->next);
-		}
-		else if (queue->direction == DOWN) {
+		} else if (queue->direction == DOWN) {
 			isNewHead = floor > queue->head->value;
 			if (!isNewHead)
 				for (; current->next != NULL && current->next->value > floor; current = current->next);
 		}
 	}
-	Node *n = (Node *) malloc(sizeof(Node));
+	Node *n = malloc(sizeof(Node));
 	n->value = floor;
 	if (!isEmpty(queue)) {
 		if (isNewHead) {
 			n->next = current;
 			queue->head = n;
-		}
-		else {
+		} else {
 			Node *tmp = current->next;
 			current->next = n;
 			n->next = tmp;
 		}
-	}
-	else {
+	} else {
 		queue->head = n;
 		n->next = NULL;
 	}
@@ -41,25 +38,30 @@ void addFloor(Queue *queue, int floor) {
 }
 
 void removeFloor(Queue *queue, int floor) {
-	if (!isEmpty(queue)) {
-		Node *current = queue->head;
-		if (current->value == floor) // first node
-			queue->head = current->next;
-		else { // not first node
-			current = current->next;
-			for (Node *prev = queue->head; current != NULL; prev->next = current, current = current->next)
-				if (current->value == floor)
-					prev->next = current->next;
-		}
+	if (isEmpty(queue))
+		return;
+	Node *current = queue->head;
+	if (current->value == floor) { // first node
+		queue->head = current->next;
 		free(current);
 		queue->size--;
+	} else { // not first node
+		current = current->next;
+		for (Node *prev = queue->head; current != NULL; prev = prev->next, current = current->next)
+			if (current->value == floor) {
+				prev->next = current->next;
+				free(current);
+				queue->size--;
+				return;
+			}
 	}
 }
 
 void printQueue(Queue *queue) {
-	if (!isEmpty(queue))
-		for (Node *current = queue->head; current != NULL; current = current->next)
-			printf("%d\n", current->value);
+	if (isEmpty(queue))
+		return;
+	for (Node *current = queue->head; current != NULL; current = current->next)
+		printf("%d\n", current->value);
 }
 
 int isEmpty(Queue *queue) {
