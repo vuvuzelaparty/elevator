@@ -21,39 +21,30 @@ void addFloor(Queue *queue, int floor) {
 	}
 	Node *n = malloc(sizeof(Node));
 	n->value = floor;
-	if (!isEmpty(queue)) {
+	if (isEmpty(queue))
+		queue->head = n;
+	else {
 		if (isNewHead) {
 			n->next = current;
 			queue->head = n;
 		} else {
-			Node *tmp = current->next;
+			n->next = current->next;
 			current->next = n;
-			n->next = tmp;
 		}
-	} else {
-		queue->head = n;
-		n->next = NULL;
 	}
 	queue->size++;
 }
 
 void removeFloor(Queue *queue, int floor) {
-	if (isEmpty(queue))
-		return;
-	Node *current = queue->head;
-	if (current->value == floor) { // first node
-		queue->head = current->next;
-		free(current);
-		queue->size--;
-	} else { // not first node
-		current = current->next;
-		for (Node *prev = queue->head; current != NULL; prev = prev->next, current = current->next)
-			if (current->value == floor) {
-				prev->next = current->next;
-				free(current);
-				queue->size--;
-				return;
-			}
+	for (Node **linkToCurrent = &(queue->head), *current = *linkToCurrent;
+		 current != NULL; current = *linkToCurrent) {
+		if (current->value == floor) {
+			*linkToCurrent = current->next;
+			free(current);
+			queue->size--;
+			return;
+		} else
+			linkToCurrent = &(current->next);
 	}
 }
 
