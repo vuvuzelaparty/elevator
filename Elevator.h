@@ -25,5 +25,4 @@ void fini(void);
 void listenForButtonPress(void);
 void buttonPress(int floor);
 void tick(void);
-void printQueues(void);
 #endif

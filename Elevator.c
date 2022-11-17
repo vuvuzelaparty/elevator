@@ -2,16 +2,25 @@
 #include "Elevator.h"
 
 Elevator *elevator = NULL;
-Queue *upQueue = NULL;
-Queue *downQueue = NULL;
+Queue *queue = NULL;
 
 int main(void) {
 	init();
 	printf("forever elevator!\n\n");
+	addFloor(queue, 3, elevator->currentFloor);
+	addFloor(queue, 6, elevator->currentFloor);
+	addFloor(queue, 9, elevator->currentFloor);
+	addFloor(queue, 12, elevator->currentFloor);
+	addFloor(queue, 15, elevator->currentFloor);
+	addFloor(queue, 18, elevator->currentFloor);
+	for (int i = 0; i < 15; i++)
+		tick();
+	/*
 	while (1) {
 		tick();
 		sleep(2);
 	}
+	*/
 	fini();
 	return 0;
 }
@@ -20,18 +29,14 @@ void init() {
 	elevator = malloc(sizeof(elevator));
 	elevator->currentFloor = FIRST_FLOOR;
 	elevator->state = IDLE;
-	upQueue = malloc(sizeof(Queue));
-	upQueue->direction = UP;
-	upQueue->size = 0;
-	downQueue = malloc(sizeof(Queue));
-	downQueue->direction = DOWN;
-	downQueue->size = 0;
+	queue = malloc(sizeof(Queue));
+	queue->size = 0;
 }
 
 void fini(void) {
 	free(elevator);
-	free(upQueue);
-	free(downQueue);
+	free(queue);
+	free(queue);
 }
 
 void listenForButtonPress(void) {
@@ -41,10 +46,7 @@ void listenForButtonPress(void) {
 }
 
 void buttonPress(int floor) {
-	if (floor > elevator->currentFloor)
-		addFloor(upQueue, floor);
-	else if (floor < elevator->currentFloor)
-		addFloor(downQueue, floor);
+	addFloor(queue, floor, elevator->currentFloor);
 }
 
 void tick(void) {
@@ -52,42 +54,39 @@ void tick(void) {
 	switch(elevator->state) {
 		case GOING_UP :
 			printf("GOING UP\n");
-			elevator->currentFloor = upQueue->head->value;
-			removeFloor(upQueue, elevator->currentFloor);
-			if (!isEmpty(upQueue))
+			elevator->currentFloor = queue->head->value;
+			removeFloor(queue, elevator->currentFloor);
+			if (queue->head->value > elevator->currentFloor)
 				elevator->state = STOPPED_DESTINED_UP;
 			else
-				elevator->state = isEmpty(downQueue) ? IDLE : STOPPED_DESTINED_DOWN;
+				elevator->state = isEmpty(queue) ? IDLE : STOPPED_DESTINED_DOWN;
 			break;
 		case GOING_DOWN :
 			printf("GOING DOWN\n");
-			elevator->currentFloor = downQueue->head->value;
-			removeFloor(downQueue, elevator->currentFloor);
-			if (!isEmpty(downQueue))
+			elevator->currentFloor = queue->head->value;
+			removeFloor(queue, elevator->currentFloor);
+			if (queue->head->value < elevator->currentFloor)
 				elevator->state = STOPPED_DESTINED_DOWN;
 			else
-				elevator->state = isEmpty(upQueue) ? IDLE : STOPPED_DESTINED_UP;
+				elevator->state = isEmpty(queue) ? IDLE : STOPPED_DESTINED_UP;
 			break;
 		case STOPPED_DESTINED_UP :
 			printf("STOPPED DESTINED UP\nCurrent floor: %d\n", elevator->currentFloor);
-			listenForButtonPress();
+			//listenForButtonPress();
 			elevator->state = GOING_UP;
-			printQueues();
 			break;
 		case STOPPED_DESTINED_DOWN :
 			printf("STOPPED DESTINED DOWN\nCurrent floor: %d\n", elevator->currentFloor);
-			listenForButtonPress();
+			//listenForButtonPress();
 			elevator->state = GOING_DOWN;
-			printQueues();
 			break;
 		case IDLE :
 			printf("IDLE\nCurrent floor: %d\n", elevator->currentFloor);
-			listenForButtonPress();
-			if (!isEmpty(upQueue))
+			//listenForButtonPress();
+			if (queue->head->value > elevator->currentFloor)
 				elevator->state = GOING_UP;
-			else if (!isEmpty(downQueue))
+			else if (queue->head->value < elevator->currentFloor)
 				elevator->state = GOING_DOWN;
-			printQueues();
 			break;
 	}
 }
@@ -96,15 +95,4 @@ int createButtonPress(void) {
 	int x = rand() % TOP_FLOOR + 1;
 	printf("button pressed: %d\n", x);
 	return x;
-}
-
-void printQueues(void) {
-	if (!isEmpty(upQueue)) {
-		printf("\nupQueue:\n");
-		printQueue(upQueue);
-	}
-	if (!isEmpty(downQueue)) {
-		printf("downQueue:\n");
-		printQueue(downQueue);
-	}
 }
