@@ -2,8 +2,8 @@
 #define ELEVATOR_QUEUE_H
 #include <stdio.h>
 
-#define UP 1
-#define DOWN 0
+#define TOP_FLOOR 20
+#define FIRST_FLOOR 1
 
 typedef struct node_st {
 	int value;
@@ -11,11 +11,11 @@ typedef struct node_st {
 } Node;
 
 typedef struct queue_st {
-	int direction;
 	int size;
 	Node *head;
 } Queue;
 
+Node *createNewNode(int value, Node *next);
 void addFloor(Queue *queue, int floor, int currentFloor);
 void removeFloor(Queue *queue, int floor);
 void printQueue(Queue *queue);

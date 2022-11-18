@@ -1,37 +1,35 @@
 #include <stdlib.h>
 #include "ElevatorQueue.h"
 
-void addFloor(Queue *queue, int floor) {
-	Node *current = queue->head;
-	int isNewHead;
-	if (!isEmpty(queue)) {
-		// make sure that we don't put the same floor more than once
-		for (Node *check = current; check != NULL; check = check->next)
-			if (check->value == floor)
-				return;
-		if (queue->direction == UP) {
-			isNewHead = floor < queue->head->value;
-			if (!isNewHead)
-				for (; current->next != NULL && current->next->value < floor; current = current->next);
-		} else if (queue->direction == DOWN) {
-			isNewHead = floor > queue->head->value;
-			if (!isNewHead)
-				for (; current->next != NULL && current->next->value > floor; current = current->next);
-		}
-	}
+Node *createNewNode(int value, Node *next){
 	Node *n = malloc(sizeof(Node));
-	n->value = floor;
-	if (isEmpty(queue))
-		queue->head = n;
-	else {
-		if (isNewHead) {
-			n->next = current;
-			queue->head = n;
-		} else {
-			n->next = current->next;
-			current->next = n;
+	n->value = value;
+	n->next = next;
+	return n;
+}
+
+void addFloor(Queue *queue, int floorToAdd, int currentFloor) {
+	if (floorToAdd < FIRST_FLOOR || floorToAdd > TOP_FLOOR || floorToAdd == currentFloor)
+		return;
+	if (isEmpty(queue)) { // empty list, first node
+		queue->head = createNewNode(floorToAdd, NULL);
+		queue->size++;
+		return;
+	}
+	Node **linkToCurrent = &(queue->head);
+	for (Node *current = *linkToCurrent; current != NULL; current = *linkToCurrent) {
+		if (current->value == floorToAdd) // make sure we don't put the same floor twice
+			return;
+		else if ((floorToAdd > currentFloor && floorToAdd > current->value) || // traverse linked list
+				 (floorToAdd < currentFloor && floorToAdd < current->value))
+			linkToCurrent = &(current->next);
+		else { // add new node inside list
+			*linkToCurrent = createNewNode(floorToAdd, current);
+			queue->size++;
+			return;
 		}
 	}
+	*linkToCurrent = createNewNode(floorToAdd, NULL); // append new node at the end of list
 	queue->size++;
 }
 
@@ -49,8 +47,7 @@ void removeFloor(Queue *queue, int floor) {
 }
 
 void printQueue(Queue *queue) {
-	if (isEmpty(queue))
-		return;
+	printf("Queue:\n");
 	for (Node *current = queue->head; current != NULL; current = current->next)
 		printf("%d\n", current->value);
 }

@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include "ElevatorQueue.h"
 
-#define TOP_FLOOR 20
-#define FIRST_FLOOR 1
 
 typedef enum state_et {
 	IDLE = 0,
