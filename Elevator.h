@@ -17,10 +17,10 @@ typedef struct elevator_st {
 	STATE state;
 } Elevator;
 
-int createButtonPress(void);
 void init(void);
 void fini(void);
 void listenForButtonPress(void);
 void buttonPress(int floor);
 void tick(void);
+int createButtonPress(void);
 #endif

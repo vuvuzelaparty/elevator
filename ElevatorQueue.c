@@ -8,28 +8,34 @@ Node *createNewNode(int value, Node *next){
 	return n;
 }
 
-void addFloor(Queue *queue, int floorToAdd, int currentFloor) {
-	if (floorToAdd < FIRST_FLOOR || floorToAdd > TOP_FLOOR || floorToAdd == currentFloor)
+void addFloor(Queue *queue, int floor) {
+	if (floor < FIRST_FLOOR || floor > TOP_FLOOR)
 		return;
 	if (isEmpty(queue)) { // empty list, first node
-		queue->head = createNewNode(floorToAdd, NULL);
+		queue->head = createNewNode(floor, NULL);
 		queue->size++;
 		return;
 	}
-	Node **linkToCurrent = &(queue->head);
-	for (Node *current = *linkToCurrent; current != NULL; current = *linkToCurrent) {
-		if (current->value == floorToAdd) // make sure we don't put the same floor twice
+	Node *current = queue->head;
+	int isNewHead;
+	// make sure that we don't put the same floor more than once
+	for (Node *check = current; check != NULL; check = check->next)
+		if (check->value == floor)
 			return;
-		else if ((floorToAdd > currentFloor && floorToAdd > current->value) || // traverse linked list
-				 (floorToAdd < currentFloor && floorToAdd < current->value))
-			linkToCurrent = &(current->next);
-		else { // add new node inside list
-			*linkToCurrent = createNewNode(floorToAdd, current);
-			queue->size++;
-			return;
-		}
+	// find the spot in the queue where the new floor needs to go
+	if (queue->direction == UP) {
+		isNewHead = floor < queue->head->value;
+		if (!isNewHead)
+			for (; current->next != NULL && current->next->value < floor; current = current->next);
+	} else if (queue->direction == DOWN) {
+		isNewHead = floor > queue->head->value;
+		if (!isNewHead)
+			for (; current->next != NULL && current->next->value > floor; current = current->next);
 	}
-	*linkToCurrent = createNewNode(floorToAdd, NULL); // append new node at the end of list
+	if (isNewHead)
+		queue->head = createNewNode(floor, current);
+	else
+		current->next = createNewNode(floor, current->next);
 	queue->size++;
 }
 
@@ -47,7 +53,10 @@ void removeFloor(Queue *queue, int floor) {
 }
 
 void printQueue(Queue *queue) {
-	printf("Queue:\n");
+	if (queue->direction == UP)
+		printf("Up queue:\n");
+	else if (queue->direction == DOWN)
+		printf("Down queue:\n");
 	for (Node *current = queue->head; current != NULL; current = current->next)
 		printf("%d\n", current->value);
 }

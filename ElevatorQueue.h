@@ -5,6 +5,9 @@
 #define TOP_FLOOR 20
 #define FIRST_FLOOR 1
 
+#define UP 1
+#define DOWN 0
+
 typedef struct node_st {
 	int value;
 	struct node_st *next;
@@ -13,10 +16,11 @@ typedef struct node_st {
 typedef struct queue_st {
 	int size;
 	Node *head;
+	int direction;
 } Queue;
 
 Node *createNewNode(int value, Node *next);
-void addFloor(Queue *queue, int floor, int currentFloor);
+void addFloor(Queue *queue, int floor);
 void removeFloor(Queue *queue, int floor);
 void printQueue(Queue *queue);
 int isEmpty(Queue *queue);
