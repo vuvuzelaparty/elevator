@@ -9,14 +9,14 @@
 #define DOWN 0
 
 typedef struct node_st {
-	int value;
-	struct node_st *next;
+    int value;
+    struct node_st *next;
 } Node;
 
 typedef struct queue_st {
-	int size;
-	Node *head;
-	int direction;
+    int size;
+    Node *head;
+    int direction;
 } Queue;
 
 Node *createNewNode(int value, Node *next);

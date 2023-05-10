@@ -5,16 +5,16 @@
 
 
 typedef enum state_et {
-	IDLE = 0,
-	GOING_UP,
-	GOING_DOWN,
-	STOPPED_DESTINED_UP,
-	STOPPED_DESTINED_DOWN
+    IDLE = 0,
+    GOING_UP,
+    GOING_DOWN,
+    STOPPED_DESTINED_UP,
+    STOPPED_DESTINED_DOWN
 } STATE;
 
 typedef struct elevator_st {
-	int currentFloor;
-	STATE state;
+    int currentFloor;
+    STATE state;
 } Elevator;
 
 void init(void);
